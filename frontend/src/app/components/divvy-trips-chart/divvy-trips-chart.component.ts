@@ -166,8 +166,7 @@ export class DivvyTripsChartComponent implements OnInit {
 
 
 
-    /////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////// my code for day 3, 4, 5, 6, 7.
+   
     else if (day == 3) {
       this.chart_3_name = 'Wednesday';
       this.placesService
@@ -245,14 +244,6 @@ export class DivvyTripsChartComponent implements OnInit {
 
 
 
-    /////////////     ADD YOUR CODE HERE      ///////////
-
-    // Extend the else if block above to add and plot the charts for
-    // Wednesday, Thursday, Friday, and Saturday
-
-
-    /////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////
 
 
   }

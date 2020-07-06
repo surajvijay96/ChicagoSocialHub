@@ -1,52 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-
-/// This file and the source code provided can be used only for
-/// the projects and assignments of this course
-
-/// Last Edit by Dr. Atef Bader: 1/27/2019
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//////////////////////              SETUP NEEDED                ////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-//  Install Nodejs (the bundle includes the npm) from the following website:
-//      https://nodejs.org/en/download/
-
-
-//  Before you start nodejs make sure you install from the
-//  command line window/terminal the following packages:
-//      1. npm install express
-//      2. npm install pg
-//      3. npm install pg-format
-//      4. npm install moment --save
-//      5. npm install elasticsearch
-
-
-//  Read the docs for the following packages:
-//      1. https://node-postgres.com/
-//      2.  result API:
-//              https://node-postgres.com/api/result
-//      3. Nearest Neighbor Search
-//              https://postgis.net/workshops/postgis-intro/knn.html
-//      4. https://www.elastic.co/guide/en/elasticsearch/client/javascript-api/current/quick-start.html
-//      5. https://momentjs.com/
-//      6. http://momentjs.com/docs/#/displaying/format/
-
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
 
 const express = require('express');
 
@@ -142,13 +93,12 @@ var dailyTrips = [];
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+
 
 //////   The following are the routes received from NG/Browser client        ////////
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 
@@ -285,16 +235,7 @@ router.route('/stations/fetch_all_divvy_stations_data').post((req, res) => {
 
 });
 
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
 /////////       Get Divvy Trips Per Day                   //////////
-
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
-
-
 
 router.route('/getDivvyTripsCountsSunday').get((req, res) => {
 
@@ -340,13 +281,10 @@ router.route('/getDivvyTripsCountsForSaturday').get((req, res) => {
 
 
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+
 
 /////////       Count Divvy Trips Per Day                 //////////
 
-////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
 
 
 router.route('/countDivvyTripsPerDay').post((req, res) => {
@@ -417,13 +355,10 @@ router.route('/countDivvyTripsPerDay').post((req, res) => {
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////    Get Divvy - Daily Trips on PostgreSQL       /////////////////
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
 
 
 async function getDailyTrips(dayIndex, query) {
@@ -535,18 +470,7 @@ async function find_places_from_yelp(place, where) {
 
     places_found = [];
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Using the business name to search for businesses will leead to incomplete results
-// better to search using categorisa/alias and title associated with the business name
-// For example one of the famous places in chicago for HotDogs is Portillos
-// However, it also offers Salad and burgers
-// Here is an example of a busness review from Yelp for Pertilos
-//               alias': 'portillos-hot-dogs-chicago-4',
-//              'categories': [{'alias': 'hotdog', 'title': 'Hot Dogs'},
-//                             {'alias': 'salad', 'title': 'Salad'},
-//                             {'alias': 'burgers', 'title': 'Burgers'}],
-//              'name': "Portillo's Hot Dogs",
-//////////////////////////////////////////////////////////////////////////////////////
+
 
 
     let body = {
@@ -609,15 +533,7 @@ async function find_places_from_yelp(place, where) {
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
 
-///////    Fetch Divvy Stations' Logs from ElasticSearch                     ////////   
-///////    Based on the time-window selected                                 ////////
-///////    Time-window : 1 Hour, 24 Hours, 7 Days                            ////////
-
-/////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -645,7 +561,6 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
       var targetTime = new Date(start_datetime_var);
       var tzDifference = targetTime.getTimezoneOffset();
 
-      //convert the offset to milliseconds, add to targetTime, and make a new Date
       start_datetime_var = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
       start_datetime_var_2 = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
       go_back_in_time_var = start_datetime_var.getHours() - 1;
@@ -687,7 +602,6 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
           var targetTime = new Date(start_datetime_var);
           var tzDifference = targetTime.getTimezoneOffset();
 
-          //convert the offset to milliseconds, add to targetTime, and make a new Date
           start_datetime_var = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
           start_datetime_var_2 = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
 
@@ -704,11 +618,7 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
 
           time_stamp_var_1 = start_datetime_var.toISOString().slice(0,-5).replace('Z', ' ').replace('T', ' ');
 
-          // Recalculate lower bound for the time-window
-          // Take 2 minutes sample on the top of every hour for the past 24 hours
-          // This is NOT the best we could do..
-          // We can calculate the average for every hour and use that 
-          // as the average sample for the heatmap to display 
+        
           time_stamp_var_4  = new Date(new Date(time_stamp_var_3).getTime() - new Date(time_stamp_var_3).getTimezoneOffset() * 60 * 1000);
 
           diffMinutes = time_stamp_var_4 .getMinutes() - 2 ;
@@ -743,7 +653,6 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
 
 
 
-            //convert the offset to milliseconds, add to targetTime, and make a new Date
             start_datetime_var = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
             start_datetime_var_2 = new Date(targetTime.getTime() - tzDifference * 60 * 1000);
 
@@ -763,11 +672,6 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
             time_stamp_var_1 = start_datetime_var.toISOString().slice(0,-5).replace('Z', ' ').replace('T', ' ');
 
 
-            // Recalculate lower bound fo the time-window
-            // Take 2 minutes sample on the top of every hour of every day for the past 7 days
-            // This is NOT the best we could do...
-            // We can calculate the average for every hour and use that 
-            // as the average sample for the heatmap to display 
             time_stamp_var_4  = new Date(new Date(time_stamp_var_3).getTime() - new Date(time_stamp_var_3).getTimezoneOffset() * 60 * 1000);
 
             diffMinutes = time_stamp_var_4 .getMinutes() - 2 ;
@@ -819,9 +723,7 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
 
 
     
-  // collect all the records
 
-  // console.log('results.hits.total = ', results.hits.total);
 
   results.hits.hits.forEach(function (hit) {
     allRecords.push(hit);
@@ -834,9 +736,7 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
   });
 
 
-            
-  // Adjust lower bound and upper bound for the time-window
-  // for data collection for the next round from ElasticSearch
+
 
     if(timeRange.includes(PAST_HOUR)){
         time_stamp_var_2 = time_stamp_var_3;
@@ -861,11 +761,7 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
 
     time_stamp_var_3 = time_stamp_var_4 .toISOString().replace('Z', '').replace('T', ' ').slice(0, -4);
 
-    // Recalculate lower bound fo the time-window
-    // Take 2 minutes sample on the top of every hour for the past 24 hours
-    // This is NOT the best we could do..
-    // We can calculate the average for every hour and use that 
-    // as the average sample for the heatmap to display 
+   
     time_stamp_var_4  = new Date(new Date(time_stamp_var_3).getTime() - new Date(time_stamp_var_3).getTimezoneOffset() * 60 * 1000);
 
     diffMinutes = time_stamp_var_4 .getMinutes() - 2 ;
@@ -890,12 +786,6 @@ async function get_all_divvy_stations_log(timeRange, newTimeRangeSelection) {
     time_stamp_var_3 = time_stamp_var_4 .toISOString().replace('Z', '').replace('T', ' ').slice(0, -4);
 
 
-
-    // Recalculate lower bound fo the time-window
-    // Take 2 minutes sample on the top of every hour of every day for the past 7 days
-    // This is NOT the best we could do...
-    // We can calculate the average for every hour and use that 
-    // as the average sample for the heatmap to display 
     time_stamp_var_4  = new Date(new Date(time_stamp_var_3).getTime() - new Date(time_stamp_var_3).getTimezoneOffset() * 60 * 1000);
 
     diffMinutes = time_stamp_var_4 .getMinutes() - 2 ;

@@ -65,21 +65,7 @@ export class RealTimeSMALineComponent implements OnInit {
         this.width = 900 - this.margin.left - this.margin.right;
         this.height = 500 - this.margin.top - this.margin.bottom;
     }
-    /////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////
-
-
-    /////////////     ADD YOUR CODE HERE      ///////////
-
-    // Write your code SIMILAR to real-time-chart component
-    // real-time-sma-line-chart.component.html MUST BE UPDATED as well
-    // Update list-of-stations.component.ts by adding somtehing similar to getLineChart(stationName)
-    // Update list-of-stations.component.html by adding somtehingsimilar to (click)="getLineChart(element.stationName)
-
-
-    /////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////
-
+    
     ngOnInit() {
         if (this.SMALineChart !== undefined) {
             this.SMALineChart.unsubscribe();

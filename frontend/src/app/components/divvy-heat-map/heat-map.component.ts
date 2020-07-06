@@ -89,13 +89,6 @@ export class HeatMapComponent implements OnInit {
 
 
 
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
-
-  ////////////////   Angular Callback for TimeRangeSelection
-
-  //////////////////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -115,7 +108,6 @@ export class HeatMapComponent implements OnInit {
 
   //////////////////////////////////////////////////////
   //////////////////////////////////////////////////////
-  // A function used to prefix a single digit with a ZERO
 
 
   checkForSingleDigitAndPrefixZeroIfNeeded(digitValue) {
@@ -134,13 +126,7 @@ export class HeatMapComponent implements OnInit {
   getDivvyStationsStatus(timeRangeSelection) {
 
 
-    // The algorithm to collect log data for Divvy stations as follows:
-    // Get current time and then rewind backward in time based on the time selection
-    // 1 Hour  time selection     :  -60 * 60 * 1000 seconds
-    // 24 hours  time selection   :  24 * -60 * 60 * 1000 seconds
-    // 7 days time selection      :   7 * 24 * -60 * 60 * 1000 seconds
 
-    // this is the time used to be displayed as label on the map
     var simulatedClockTime;
     var currentTime = new Date();
 
@@ -148,11 +134,6 @@ export class HeatMapComponent implements OnInit {
     var currentTimeForDataCollection;
 
 
-
-    // What is the time-range selected? 1-Hour, 24-Hours, 7-days?
-    // Based on the time-range selected we specify how many animation frames to display on th eheatmap 
-    // for the Divvy logs collected from ElasticSearch
-    // every data sample is displayed as a frame on the heatmap
 
     if (this.timeRangeSelected == this.PAST_HOUR) {
       this.noOfDivvyDataSamplesRequested = this.FRAMES_PER_HOUR;
@@ -166,7 +147,6 @@ export class HeatMapComponent implements OnInit {
 
 
     /////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////// my code for 24hours
     else if (this.timeRangeSelected == this.PAST_24_HOURS) {
       this.noOfDivvyDataSamplesRequested = this.FRAMES_PER_DAY;
       startTimeForDataCollection = new Date(currentTime.getTime() - (24 * 60 * 60 * 1000));
@@ -181,40 +161,7 @@ export class HeatMapComponent implements OnInit {
     }
 
 
-    /////////////     ADD YOUR CODE HERE      ///////////
-
-    // Write your code to extend the above if statement with else block to handle
-    //          timeRangeSelected == this.PAST_24_HOURS
-    //          noOfDivvyDataSamplesRequested = this.FRAMES_PER_DAY
-    // And
-    //          timeRangeSelected == this.PAST_7_DAYS
-    //          noOfDivvyDataSamplesRequested = this.FRAMES_PER_WEEK
-
-
-    // The following are fine-tunable parameters 
-    // They are used to specify how many data samples (Divvy heart-beats per Time-Unit)
-    //      FRAMES_PER_HOUR = 30;
-    //      FRAMES_PER_DAY = 24;
-    //      FRAMES_PER_WEEK = 7;
-
-    /////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////
-
-
-
-
-
-
-    //console.log('this.noOfDivvyDataSamplesRequested = ', this.noOfDivvyDataSamplesRequested);
-    //console.log('startTimeForDataCollection= ', startTimeForDataCollection);
-    //console.log('currentTimeForDataCollection= ', currentTimeForDataCollection);
-    //console.log('this.timeRangeSelected = ', this.timeRangeSelected);
-
-
-
-    // Check to see if we collected the REQUESTED number of samples from Divvy logs on ElasticSearch
-    // For example, for the past hour we collect 30 samples (2 minutes increments) and display 30 heatmap frames
-    // For example, for the past 24 hours we collect 24 samples (1 hour increments) and display 24 heatmap frames
+   
 
 
     if (this.noOfDivvyDataSamplesProcessed < this.noOfDivvyDataSamplesRequested) {
@@ -223,9 +170,7 @@ export class HeatMapComponent implements OnInit {
         this.noOfDivvyDataSamplesProcessed = this.noOfDivvyDataSamplesProcessed + 1;
 
 
-        // Adjust time Offset for the next cycle by 2 minutes
-        // for example: 2, 4, 6, 8, 10, ...
-        // So, current time is 
+       
         if (this.timeRangeSelected == this.PAST_HOUR) {
           this.timeOffset = (this.noOfDivvyDataSamplesProcessed) * (60 * 1000 * 2);
         } else
@@ -236,12 +181,7 @@ export class HeatMapComponent implements OnInit {
               this.timeOffset = (this.noOfDivvyDataSamplesProcessed) * (24 * 60 * 60 * 1000);
             }
 
-        // Create digital clock as label on the heatmap
-        // The convention is to prefix with ZERO the single digit for month, day, jour, minute, second
-        // in the digital clock/time
-
-        //The value returned by getMonth() is an integer between 0 and 11. 
-        // 0 corresponds to January, 1 to February
+       
         currentTimeForDataCollection = new Date(startTimeForDataCollection.getTime() + this.timeOffset);
         let monthNumber = this.checkForSingleDigitAndPrefixZeroIfNeeded(currentTimeForDataCollection.getMonth() + 1);
         simulatedClockTime = currentTimeForDataCollection.getFullYear() + '-' +
@@ -255,13 +195,11 @@ export class HeatMapComponent implements OnInit {
 
 
 
-        // Now clear the HeatMap and then plot the data on the heatmap
         this.clearHeatMap();
         this.plot_availableDocksInDivvyStations_on_heatMap(data);
 
 
-        // Not a new time-range selection, so continue calling the same method but 
-        // with new time offset increment
+      
         this.timer = setTimeout(() => this.getDivvyStationsStatus(this.notNewTimeRangeSelection), 300);
       });
     }
